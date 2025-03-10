@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">图像隐写分析系统</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>上传图片</label>
+                            <input type="file" class="form-control" id="imageInput" accept="image/*">
+                        </div>
+                        <button class="btn btn-primary mt-3" onclick="uploadImage()">开始分析</button>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="preview" class="mt-3">
+                            <img id="imagePreview" class="img-fluid" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">分析结果</h4>
+                <div id="result" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>检测结果：</strong><span id="isStego"></span></p>
+                            <p><strong>置信度：</strong><span id="confidence"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>详细分析：</strong></p>
+                            <pre id="details"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">历史记录</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>上传时间</th>
+                                <th>图片</th>
+                                <th>检测结果</th>
+                                <th>置信度</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function uploadImage() {
+    const fileInput = document.getElementById('imageInput');
+    const file = fileInput.files[0];
+    if (!file) {
+        alert('请选择图片文件');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    fetch('/upload/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            analyzeImage(data.analysis_id);
+        } else {
+            alert('上传失败');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('上传失败');
+    });
+}
+
+function analyzeImage(analysisId) {
+    fetch(`/analyze/${analysisId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                displayResult(data);
+                loadHistory();
+            } else {
+                alert('分析失败');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('分析失败');
+        });
+}
+
+function displayResult(data) {
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'block';
+    document.getElementById('isStego').textContent = data.is_stego ? '包含隐写信息' : '不包含隐写信息';
+    document.getElementById('confidence').textContent = `${(data.confidence * 100).toFixed(2)}%`;
+    document.getElementById('details').textContent = JSON.stringify(data.result, null, 2);
+}
+
+function loadHistory() {
+    fetch('/history/')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('historyTable');
+            tbody.innerHTML = '';
+            data.analyses.forEach(analysis => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${analysis.upload_time}</td>
+                    <td><img src="${analysis.image_url}" class="img-thumbnail" style="max-height: 100px;"></td>
+                    <td>${analysis.is_stego ? '包含隐写信息' : '不包含隐写信息'}</td>
+                    <td>${(analysis.confidence * 100).toFixed(2)}%</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// 图片预览
+document.getElementById('imageInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('imagePreview');
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+// 页面加载时加载历史记录
+document.addEventListener('DOMContentLoaded', loadHistory);
+</script>
+{% endblock %} 
