@@ -68,7 +68,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('index')
+            return redirect('index')  # 重定向到/home/路径
         else:
             messages.error(request, '用户名或密码错误')
     return render(request, 'login.html')

@@ -131,7 +131,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "MajesticAdmin-Free-Bootstrap-Admin-Template-master" / "template",
-    BASE_DIR / "static",
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
@@ -144,6 +143,12 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
+
+# 确保在开发环境中启用静态文件服务
+if DEBUG:
+    STATICFILES_DIRS = [
+        BASE_DIR / "MajesticAdmin-Free-Bootstrap-Admin-Template-master" / "template",
+    ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
