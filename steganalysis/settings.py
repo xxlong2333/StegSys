@@ -56,7 +56,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            BASE_DIR / "MajesticAdmin-Free-Bootstrap-Admin-Template-master" / "template",
+            # BASE_DIR / "MajesticAdmin-Free-Bootstrap-Admin-Template-master" / "template",
             BASE_DIR / "analysis" / "templates",
         ],
         "APP_DIRS": True,
