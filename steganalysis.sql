@@ -41,6 +41,7 @@ CREATE TABLE `analysis_analysisresult`  (
 -- ----------------------------
 -- Records of analysis_analysisresult
 -- ----------------------------
+-- 
 
 -- ----------------------------
 -- Table structure for analysis_imageanalysis
