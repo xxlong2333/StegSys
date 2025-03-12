@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <!-- 总检测次数 -->
+  <div class="col-md-3 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">总检测次数</h4>
+        <p class="card-description">累计检测图像数</p>
+        <div class="d-flex align-items-center">
+          <i class="mdi mdi-eye mdi-36px text-primary"></i>
+          <h3 class="mb-0 ml-3">1200</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 成功分析 -->
+  <div class="col-md-3 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">成功分析</h4>
+        <p class="card-description">成功识别隐写图像</p>
+        <div class="d-flex align-items-center">
+          <i class="mdi mdi-check-circle mdi-36px text-success"></i>
+          <h3 class="mb-0 ml-3">980</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 平均检测置信度 -->
+  <div class="col-md-3 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">平均检测置信度</h4>
+        <p class="card-description">模型信心评分</p>
+        <div class="d-flex align-items-center">
+          <i class="mdi mdi-chart-line mdi-36px text-warning"></i>
+          <h3 class="mb-0 ml-3">85%</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 异常报警 -->
+  <div class="col-md-3 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">异常报警</h4>
+        <p class="card-description">疑似隐写报警数</p>
+        <div class="d-flex align-items-center">
+          <i class="mdi mdi-alert mdi-36px text-danger"></i>
+          <h3 class="mb-0 ml-3">20</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 检测趋势图表 -->
+<div class="row">
+  <div class="col-md-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">检测趋势</h4>
+        <canvas id="trendChart" style="height: 250px;"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 近期检测记录 -->
+<div class="row">
+  <div class="col-md-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">近期检测记录</h4>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>上传时间</th>
+                <th>图像名称</th>
+                <th>检测结果</th>
+                <th>置信度</th>
+              </tr>
+            </thead>
+           
+            <tbody>
+              <tr>
+                <td>001</td>
+                <td>2025-03-10 14:30</td>
+                <td>sample1.jpg</td>
+                <td>存在隐写</td>
+                <td>90%</td>
+              </tr>
+              <tr>
+                <td>002</td>
+                <td>2025-03-10 15:45</td>
+                <td>sample2.jpg</td>
+                <td>正常</td>
+                <td>80%</td>
+              </tr>
+              <!-- 根据实际数据动态生成记录 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 如需在页面中直接初始化图表，可在此添加额外的脚本，或统一放在 js/dashboard.js 中 -->
+<script>
+  var ctx = document.getElementById('trendChart').getContext('2d');
+  var trendChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['2024-01-01', '2024-01-05', '2024-01-10', '2024-01-15'],
+      datasets: [{
+        label: '检测次数',
+        data: [50, 75, 60, 90],
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        fill: true,
+        tension: 0.1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+
+{% endblock %}
+
+
+ 

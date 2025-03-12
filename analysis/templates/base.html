@@ -18,6 +18,8 @@
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
 </head>
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -97,12 +99,21 @@
     <!-- inject:js -->
     <script src="{% static 'js/off-canvas.js' %}"></script>
     <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+    
+    <script src="{% static 'js/chart.js' %}"></script>    
     <script src="{% static 'js/template.js' %}"></script>
     <script src="{% static 'js/settings.js' %}"></script>
     <script src="{% static 'js/todolist.js' %}"></script>
+    <script src="{% static 'js/chart.min.js' %}"></script>
+
+    <script src="{% static 'vendors/base/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- inject:js -->
+
+
     <!-- endinject -->
     <!-- Custom js for this page-->
-    <script src="{% static 'js/dashboard.js' %}"></script>
+     
     <!-- End custom js for this page-->
 </body>
 </html> 
