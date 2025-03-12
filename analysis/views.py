@@ -16,7 +16,7 @@ from django.utils import timezone
 @login_required
 def index(request):
     analyses = ImageAnalysis.objects.filter(user=request.user)
-    return render(request, 'index.html', {'analyses': analyses})
+    return render(request, 'index_2.html', {'analyses': analyses})
 
 @login_required
 def upload_image(request):
@@ -85,3 +85,12 @@ def register_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
+
+
+
+import base64
+import subprocess
+import os
+from django.shortcuts import render
+from django.conf import settings
+

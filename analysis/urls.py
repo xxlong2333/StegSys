@@ -11,4 +11,5 @@ urlpatterns = [
     path('upload/', views.upload_image, name='upload_image'),
     path('analyze/<int:analysis_id>/', views.analyze_image, name='analyze_image'),
     path('history/', views.get_analysis_history, name='analysis_history'),
+    
 ] 

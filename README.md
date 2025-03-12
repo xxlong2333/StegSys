@@ -16,7 +16,7 @@
 - 深度学习：PyTorch 2.0+
 - 图像处理：Pillow, OpenCV
 - 前端：Bootstrap 5, jQuery
-- 数据库：SQLite
+- 数据库：MySQL
 
 ## 安装说明
 
